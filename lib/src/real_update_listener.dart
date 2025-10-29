@@ -1,4 +1,5 @@
-import 'dart:html' as html;
+import 'package:web/web.dart' as html;
+import 'dart:js_interop';
 
 import 'package:flutter/material.dart';
 import 'package:pwa_update_listener/src/base_update_listener.dart';
@@ -60,8 +61,11 @@ class _PwaUpdateListenerState extends State<PwaUpdateListener> {
   /// The serviceWorker registration
   html.ServiceWorkerRegistration? _serviceWorkerRegistration;
 
+  /// Keep a stable JS listener reference for add/remove.
+  late final html.EventListener _visibilityChangeListenerJs;
+
   /// Check if app is in the fore/background
-  void _visibilityChangeListener(html.Event event) {
+  void _onVisibilityChange(html.Event event) {
     final visibilityState = html.window.document.visibilityState;
     if (visibilityState == _visibleState) {
       /// App became foreground
@@ -71,19 +75,23 @@ class _PwaUpdateListenerState extends State<PwaUpdateListener> {
 
   /// Get the current service worker and register eventListener
   Future<void> _registerServiceWorker() async {
-    _serviceWorkerRegistration =
-        await html.window.navigator.serviceWorker?.getRegistration();
+    final swContainer = html.window.navigator.serviceWorker;
 
-    _serviceWorkerRegistration?.addEventListener(_updateFoundEvent, (event) {
-      _serviceWorkerRegistration?.installing?.addEventListener(
-        _stateChangeEvent,
-        (event) {
-          if (_serviceWorkerRegistration?.waiting != null) {
-            widget.onReady();
-          }
-        },
-      );
-    });
+    _serviceWorkerRegistration = await swContainer.getRegistration().toDart;
+
+    _serviceWorkerRegistration?.addEventListener(
+      _updateFoundEvent,
+      ((html.Event event) {
+        _serviceWorkerRegistration?.installing?.addEventListener(
+          _stateChangeEvent,
+          ((html.Event event) {
+            if (_serviceWorkerRegistration?.waiting != null) {
+              widget.onReady();
+            }
+          }).toJS,
+        );
+      }).toJS,
+    );
   }
 
   @override
@@ -92,15 +100,16 @@ class _PwaUpdateListenerState extends State<PwaUpdateListener> {
 
     _registerServiceWorker();
 
-    html.window
-        .addEventListener(_visibilityChangeEvent, _visibilityChangeListener);
+    // Prepare and attach the JS listener for visibility changes.
+    _visibilityChangeListenerJs = ((html.Event event) => _onVisibilityChange(event)).toJS;
+    html.window.addEventListener(_visibilityChangeEvent, _visibilityChangeListenerJs);
   }
 
   @override
   void dispose() {
     html.window.removeEventListener(
       _visibilityChangeEvent,
-      _visibilityChangeListener,
+      _visibilityChangeListenerJs,
     );
     super.dispose();
   }
