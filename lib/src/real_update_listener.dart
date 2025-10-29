@@ -101,8 +101,10 @@ class _PwaUpdateListenerState extends State<PwaUpdateListener> {
     _registerServiceWorker();
 
     // Prepare and attach the JS listener for visibility changes.
-    _visibilityChangeListenerJs = ((html.Event event) => _onVisibilityChange(event)).toJS;
-    html.window.addEventListener(_visibilityChangeEvent, _visibilityChangeListenerJs);
+    _visibilityChangeListenerJs =
+        ((html.Event event) => _onVisibilityChange(event)).toJS;
+    html.window
+        .addEventListener(_visibilityChangeEvent, _visibilityChangeListenerJs);
   }
 
   @override
