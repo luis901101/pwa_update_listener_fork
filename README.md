@@ -39,7 +39,7 @@ Scaffold(
               ),
               Text(
                 '$_counter',
-                style: Theme.of(context).textTheme.headline4,
+                style: Theme.of(context).textTheme.headlineMedium,
               ),
             ],
           ),
@@ -47,3 +47,5 @@ Scaffold(
       ),
     );
 ```
+
+`PwaUpdateListener` depends only on `package:flutter/widgets.dart`, so it works in apps built with [material_ui](https://pub.dev/packages/material_ui) (Flutter 3.47+) as well as `package:flutter/material.dart`.

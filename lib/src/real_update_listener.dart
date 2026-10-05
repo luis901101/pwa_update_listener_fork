@@ -1,7 +1,7 @@
 import 'package:web/web.dart' as html;
 import 'dart:js_interop';
 
-import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:pwa_update_listener/src/base_update_listener.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 

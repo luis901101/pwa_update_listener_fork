@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:pwa_update_listener/pwa_update_listener.dart';
 
 void main() {

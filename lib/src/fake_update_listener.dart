@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:pwa_update_listener/src/base_update_listener.dart';
 
 /// Don't do anything when run with nonweb

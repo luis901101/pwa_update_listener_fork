@@ -1,6 +1,9 @@
 ## 0.1.1
 
 - Upgrade visibility_detector to ^0.4.0+2
+- Migrate from `dart:html` to `package:web` and `dart:js_interop`
+- Depend only on `flutter/widgets.dart`, so the widget works with `material_ui` as well as `flutter/material.dart`
+- Migrate the example app to `material_ui` (requires Flutter 3.47.0)
 
 ## 0.1.0
 

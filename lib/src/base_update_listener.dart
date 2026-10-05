@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 
 /// This is just an abstract class to ensure that the real/fake widget
 /// has the same constructor
